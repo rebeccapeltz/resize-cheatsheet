@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Howto-Resize</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@300&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+	<h1>Cheatsheet: Resize Images with Cloudinary <button class="print-btn" onclick="window.print()">Print</button></h1>
+
+
+	<h2 id="terminology">Resizing Terminology</h2>
+	<dl class="terminology">
+		<dt>Pixels</dt>
+		<dd>"Pixel" is short for "Picture Element" and is the unit of measure for images. Resizing always involves adding or
+			removing
+			pixels.
+		</dd>
+		<dt>Image Dimensions</dt>
+		<dd>Images are two dimensional. When resizing images, we reference the <strong>height</strong> and
+			<strong>width</strong> of an image Height is equivalent to a verticle measure, and Width is equivalent to a
+			horizontal measure. Width and height are measured in pixels.
+		</dd>
+		<dt>Aspect Ratio</dt>
+		<dd>Aspect ratio, abbreviated as <strong>AR</strong> is a measure of <strong>width</strong> :
+			<strong>height</strong>. A square image has an <strong>AR = 1</strong>, a image displayed on a mobile device
+			usually has an <strong>AR &lt; 1</strong>, and a desktop image usually has an <strong>AR &gt; 1</strong>.
+		</dd>
+		<dt>Scale</dt>
+		<dd>In the context of resizing an image, scale refers to changing the dimensions of the image. This means changing
+			either or both width and height. When you change width and height such that the AR is not maintained you may skew
+			the image which means that it will looked stretched and is usually not desirable.</dd>
+		<dt>Crop</dt>
+		<dd>When you crop an image you a selecting a portion of it to keep and throwing away the rest. In addition to
+			specifying width and height, you also need to specify what position to start the crop or a focal point around
+			which to center the cut. </dd>
+		<dt>Compress</dt>
+		<dd>Image compression refers to removing pixels. There are algorithms that can remove pixels in an intelligent way
+			so that image quality is not effect. This is an important optimization for images on the web.
+		<dt>Bounding Box</dt>
+		<dd>When 2 dimensions are specified in a crop, the focal point is by default the center of the 2 dimensions. The
+			term <strong>gravity</strong> is used to specify an option that sets this focus. While gravity is the center by
+			default, we can specify a compass direction or, using built in artificial intelligence, specify that gravity
+			should focus on a face. </dd>
+	</dl>
+
+	<h2 id="resizing">Resizing the Image</h2>
+	<p>We're using Cloudinary to resize images. All of the commands will appear in the URL of the image. </p>
+	<p>Sometimes we want to make an image smaller and sometimes we want to make it larger. To handle these 2 cases, we'll
+		demonstrate resizing on 2 images that look the same. Both have an AR = 1 and appear as square, but one is 1300 x
+		1300 and the other is 400 x 400. You can see that the image is a grid of colors in the share of blue. Each cell of
+		the grid has a number from 1 to 30, except cell 17 which has a face. The numbers will help to identify what got
+		cropped, if cropping was called for. The image we'll be using in examples is shown below.</p>
+	<div class="image">
+		<img src="ai-face-grid.png" height="300" width="300" alt="example 1:1 imgage">
+		<figcaption>AR = 1, Height="</figcaption>
+	</div>
+
+	We'll also show use an image that is 1400 x 700. This will help to see transformations on an image with a 2:1 AR.
+
+	<div class="image"><img src="grid-3-by-5.png" height="150" width="300" alt="example imgage"></div>
+
+
+	<p>At the end of this cheatsheet are instructions for using Cloudinary to upload your own image so you can try out the
+		resizing.</p>
+
+
+	<h3 id="working-with">Working with Cloudinary</h3>
+	<p>Cloudinary is a cloud service for uploading, managing and delivering media assets. Cloudinay transformations are
+		creating
+		by requesting a URL containing a set of options specified in the URL.</p>
+
+	<p>You can construct a new URL or modify and existing one. In the URL below, you would need to add your CLOUD_NAME, a
+		TRANSFORMATION
+		that contains resizing instructions, and a PUBLI_ID which is the unique name of you asset in Cloudinary.</p>
+
+	<div class="url">
+		<p>
+			<span class="nochange">https://res.cloudinary.com/</span>
+			<span class="cloudname">CLOUD_NAME</span>
+			<span class="nochange">/image/upload/</span>
+			<span class="transformation">TRANSFORMATION</span>
+			<span class="nochange">/</span>
+			<span class="publicid">PUBLIC_ID</span>
+		</p>
+	</div>
+
+	<p>You can create a <span class="cloudname">CLOUD_NAME</span> or Cloudinary will create one for you when you reigster
+		for a free account. You can
+		create the <span class="publicid">PUBLIC_ID</span> for an asset when you upload your image to Cloudinary will create
+		one for you.</p>
+
+	<p> This Cheatsheet will help you create a resizing <span class="transformation">TRANSFORMATION</span> based on your
+		needs.</p>
+	<section>
+		<h3>Common Use Cases</h3>
+		We'll tag each resizing use case with some common criteria:
+		<ul class="tags">
+			<li><a href="#" class="tag">Exact</a>Exact measurement in result. Some resizing results in fitting within a
+				bounding
+				box while others result in exact sizes. </li>
+			<li><a href="#" class="tag">Gravity</a>Gravity is used to provide focus for a crop</li>
+			<li><a href="#" class="tag">AR</a>AR is maintained</li>
+		</ul>
+		<article class="cheatsheet">
+			<caption>Use Case Cheatsheat</caption>
+			<table class="tags" border="1">
+				<tr>
+					<th>Use Case</th>
+					<th>Description</th>
+					<th>Initial<br>Dimensions</th>
+					<th>Specified<br> Dimensions</th>
+					<th>Final<br> Dimensions</th>
+					<th> <span class="transformation">TRANSFORMATION</span></th>
+					<th>image</th>
+				</tr>
+				<tr>
+					<td>Scale down</td>
+					<td><a href="#" class="tag">AR</a></td>
+					<td>1300 x 1300</td>
+					<td>500 x 500</td>
+					<td>500 x 500</td>
+					<td style="text-align:center"><code>w_500,c_scale</code></td>
+					<td><img width="50" width="50"
+							src="https://res.cloudinary.com/picturecloud7/image/upload/w_500/ai-face-grid-large.png"></td>
+				</tr>
+				<tr>
+					<td>Scale up</td>
+					<td><a href="#" class="tag">AR</a></td>
+					<td>400 x 400</td>
+					<td>500 x 500</td>
+					<td>500 x 500</td>
+					<td style="text-align:center"><code>h_500,c_scale</code></td>
+					<td><img width="50" width="50"
+							src="https://res.cloudinary.com/picturecloud7/image/upload/h_500/ai-face-grid-400.png"></td>
+				</tr>
+
+				<tr>
+					<td>Fill<br>using compass focal point</td>
+					<td><a href="#" class="tag">Exact</a><a href="#" class="tag">Gravity</a></td>
+					<td>1300 x 1300</td>
+					<td>200 x 300</td>
+					<td>200 x 300</td>
+					<td style="text-align:center"><code>w_200,h_300,c_fill,g_south_east</code></td>
+					<td><img width="50" width="50"
+							src="https://res.cloudinary.com/picturecloud7/image/upload/w_200,h_300,c_fill,g_south_east/ai-face-grid-large.png">
+					</td>
+				</tr>
+
+
+				<tr>
+					<td>Thumbnail<br>facial focal point</td>
+					<td><a href="#" class="tag">Exact</a><a href="#" class="tag">Gravity</a> <a href="#" class="tag">AR</a></td>
+					<td>1300 x 1300</td>
+					<td>100 x 100</td>
+					<td>100 x 100</td>
+					<td style="text-align:center"><code>w_100,h_100,c_thumb,g_face</code></td>
+					<td><img width="50" width="50"
+							src="https://res.cloudinary.com/picturecloud7/image/upload/w_100,h_100,c_thumb,g_face/ai-face-grid-large.png">
+					</td>
+				</tr>
+
+
+
+				<tr>
+					<td>Fit<br>Stay within bounding box</td>
+					<td> <a href="#" class="tag">AR</a></td>
+					<td>1400 x 700</td>
+					<td>200 x 200</td>
+					<td>200 x 100</td>
+					<td style="text-align:center"><code>w_300,h_200,c_fit</code></td>
+					<td><img width="50" width="50"
+							src="	https://res.cloudinary.com/picturecloud7/image/upload/w_200,h_200,c_fit/grid-3-by-5.png">
+					</td>
+				</tr>
+
+				<tr>
+					<td>Custom<br>start position for crop</td>
+					<td><a href="#" class="tag">AR</a><a href="#" class="tag">Gravity</a></td>
+					<td>1400 x 700</td>
+					<td>215 x 199</td>
+					<td>214 x 199</td>
+					<td style="text-align:center"><code>x_295,y_657,w_215,h_199,c_crop</code></td>
+					<td><img width="50" width="50"
+							src="	https://res.cloudinary.com/picturecloud7/image/upload/x_295,y_657,w_215,h_199,c_crop/ai-face-grid-large.png">
+					</td>
+				</tr>
+
+				<tr>
+					<td>Pad <br> Add padding to fill bounding box <br> Set auto color for padding</br></td>
+					<td><a href="#" class="tag">Exact</a></td>
+					<td>1400 x 700</td>
+					<td>215 x 199</td>
+					<td>214 x 199</td>
+					<td style="text-align:center"><code>w_300,h_200,c_pad,b_auto</code></td>
+					<td><img width="50" width="50"
+							src="https://res.cloudinary.com/picturecloud7/image/upload/w_300,h_200,c_pad,b_auto/ai-face-grid-large.png">
+					</td>
+				</tr>
+			</table>
+		</article>
+	</section>
+
+	<h2>Upload to Cloudinary</h2>
+	<h3>Create a free account</h3>
+	You can <a href="https://cloudinary.com/users/register/free" target="blank">create a free account</a> on Cloudinary.
+
+	<img width="400" class="instruction" src="free-account.png" alt="create free account">
+
+	You will be assigned a CLOUD_NAME when you register. You can edit it to choose your own name. Remeber this name will
+	be public and used in a URL so it's best to use lowercase alphanumeric characters separated by <strong>-</strong> and
+	<strong>_</strong>. Before you can create a Transformation, you need to upload the image you want to resize.
+
+	<h3>Upload An Image</h3>
+
+	<p>Uploading images is a multi step process that you can begin by logging in to your account.</p>
+	<ol>
+		<li>
+			To upload an image so that you can begin using transformations, you need to navigate to the <strong>Media
+				Library</strong>.
+			<img width="200" class="instruction" src="./click-ml.png" alt="click on media library tab">
+		</li>
+
+		<li>
+			Once in the Media Library, locate the <strong>Upload Button</strong> and click on it to open the Upload Widget.
+			<img width="300" class="instruction" src="./click-upload.png" alt="click on upload button">
+		</li>
+
+		<li>
+			For this example, we'll name the asset by providing our own PUBLIC_ID. You enter your own public id before you
+			select the image to upload. Locate and click on the <strong>Advanced</strong> link to open up a place to enter the
+			public id.
+			<img width="200" class="instruction" src="./click-advanced.png" alt="click on advanced link">
+		</li>
+
+		<li>
+			In this example, the public id will be assigned <strong>my-image</strong>. The PUBLIC_ID will appear in the URL so
+			use lowercase alphanumeric separated by <strong>-</strong> and <strong>_</strong> as you did with your personal
+			filename.
+			<img width="200" class="instruction" src="./enter-public-id.png" alt="enter public id">
+		</li>
+
+		<li>
+			For this example, you'll upload an image from your local file directory. To do this, click on the browse button
+			and locate an image to upload.
+			<img width="200" class="instruction" src="./click-browse.png" alt="click on browse button">
+		</li>
+
+		<li>
+			Once you've selected an image the upload process should be begin. When it's done, you'll be taken back to the
+			Media Library where you'll see your new image.
+			<img width="200" class="instruction" src="./new-image-in-ml.png" alt="view new image in media library">
+		</li>
+	</ol>
+
+	<p class="yeah">You're ready use your new image in a web page and to apply transformations to it.</p>
+
+
+</body>
+
+</html>

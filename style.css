@@ -1,0 +1,172 @@
+@media screen {
+  body {
+    background-color: black;
+    color: beige;
+    font-family: "Roboto Slab", serif;
+    padding: 3rem;
+  }
+}
+
+@media print {
+  body {
+    background-color: white;
+    color: saddlebrown;
+    font-family: "Roboto Slab", serif;
+    padding: 3rem;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Roboto", sans-serif;
+}
+@media screen {
+  p {
+    font-size: 1rem;
+  }
+  strong {
+    color: #66ff00;
+  }
+}
+
+strong {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+@media print {
+  p {
+    font-size: 0.8rem;
+  }
+  strong {
+    color: saddlebrown;
+  }
+}
+
+.url {
+  margin: 0.5rem 0;
+  font-family: "Roboto", sans-serif;
+  background-color: beige;
+  color: darkgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.nochange {
+  font-weight: bold;
+}
+.cloudname,
+.transformation,
+.publicid {
+  color: navy;
+  font-family: "Roboto", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #66ff00;
+  font-weight: bold;
+}
+img.instruction {
+  display: block;
+  margin: 1rem auto;
+}
+
+dl.terminology {
+  margin: 1rem 3rem;
+}
+dt {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+}
+
+.image img {
+  display: block;
+  margin: 1rem auto;
+}
+
+/* tags */
+
+.tags {
+  font: 12px/1.5 "PT Sans", serif;
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.tags a {
+  min-width: 40px;
+}
+
+.tag {
+  background: cornsilk;
+  border-radius: 3px 0 0 3px;
+  color: #777;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 23px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+}
+
+.tag::before {
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(0, 0, 0);
+  content: "";
+  height: 6px;
+  left: 10px;
+  position: absolute;
+  width: 6px;
+  top: 10px;
+}
+
+.tag::after {
+  background: black;
+  border-bottom: 13px solid transparent;
+  border-left: 10px solid cornsilk;
+  border-top: 13px solid transparent;
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+td {
+  text-align: center;
+  padding: 0.1rem;
+}
+
+@media print {
+  .cheatsheet {
+    page-break-before: always;
+    page-break-after: always;
+  }
+}
+
+@media print {
+  .print-btn{
+    display: none;
+  }
+}
+@media screen {
+  .print-btn {
+    background-color: #66ff00; 
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+}

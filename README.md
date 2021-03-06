@@ -1,0 +1,1 @@
+# How to Resize an Image using Cloudinary
